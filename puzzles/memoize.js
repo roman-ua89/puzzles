@@ -1,6 +1,6 @@
 
 const getResult = (id) => {
-  new Promise((resolve) => {
+  return new Promise((resolve) => {
     console.log('Fetching results for ', id);
     setTimeout(() => resolve(`Result - ${id}`), 500);
   });
@@ -9,17 +9,17 @@ const getResult = (id) => {
 const memoize = (fn) => {
   const cache = new Map();
 
-  return async(...args) => {
-    const stringArgs = JSON.stringify(args);
+  return (...args) => {
+    const key = JSON.stringify(args);
 
-    if (cache.has(stringArgs)) {
-      console.log('from cache');
-      return cache.get(stringArgs);
+    if (cache.has(key)) {
+      console.log('got from cache');
+      return cache.get(key);
     }
 
-    const res = fn(...args);
-    cache.set(stringArgs, res);
-    return res;
+    const result = fn(...args);
+    cache.set(key, result);
+    return result;
   }
 }
 
