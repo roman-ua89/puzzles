@@ -1,19 +1,33 @@
 
-const requestManager = async (url, attempts, delay = 1) => {
-  attempts -= 1;
+const mockedFetch = (url) => {
+  console.log('Make request to: ', url);
+  return new Promise((resolve, reject) => {
+    if (Math.random() < 0.5) {
+      console.log('R successful')
+      return resolve({ name: 'Roman' });
+    }
+    console.log('R NOT successful')
+    // throw new Error('data wat not taken');
+    return reject();
+  })
+}
+
+const requestManager = async (url, attempts, delay) => {
 
   try {
-    return await fetch(url);
+    return await mockedFetch(url);
   } catch (e) {
     if (attempts) {
-      setTimeout(() => {
-        requestManager(url, attempts, delay += 1);
-      }, 1000 * delay);
-    } else {
-      throw new Error('no attempts');
+      return requestManager(url, attempts - 1, delay)
+        .then(data => {
+          return data;
+        })
     }
   }
 }
 
-requestManager("http://adfsfsf.com", 3)
-  .then((response) => { console.log(response); })
+await requestManager('some url', 6, 1).then((data) => {
+  console.log('retrieved data', data)
+}).catch((err) => {
+  console.log('err: ', err);
+})
