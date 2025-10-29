@@ -9,7 +9,6 @@ var isValid = function(s) {
     ['{', '}'],
     ['[', ']'],
   ])
-  let iterationNum = 0;
   let symIndex = 0;
 
   while (strCopy.length) {
@@ -24,7 +23,6 @@ var isValid = function(s) {
     } else {
       symIndex++;
     }
-    iterationNum++;
   }
 
   return !strCopy;
